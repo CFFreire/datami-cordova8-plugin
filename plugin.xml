@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="datami-cordova8-plugin"
+    version="2.1.3">
+    <name>Datami Cordova Plugin Cordova 8</name>
+    <description>Cordova Plugin for cordova-android 7.0+ and cordova-ios</description>
+    <license>EULA</license>
+    <keywords></keywords>
+    <!-- <repo>https://github.com/ionic-team/cordova-plugin-template.git</repo> -->
+    <!-- <issue>https://github.com/ionic-team/cordova-plugin-template.git/issues</issue> -->
+
+    <engines>
+        <engine name="cordova" version=">=7.0.0" />
+        <engine name="cordova-android" version=">=7.0.0" />
+    </engines>
+
+    <js-module src="www/plugin.js" name="DatamiSDStateChangePlugin" >
+      <clobbers target="smiSdkPlugin" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+
+      <hook type="before_compile" src="multidex.js" />
+      <hook type="after_platform_add" src="multidex.js" />
+
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="DatamiSDStateChangePlugin">
+        <param name="android-package" value="com.datami.DatamiSDStateChangePlugin"/>
+      </feature>
+    </config-file>
+
+    <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application" mode="merge">
+      <application android:name="com.datami.DatamiApplication"/>
+      <application android:networkSecurityConfig="@xml/network_security_config" />
+    </edit-config>
+
+    <resource-file src="resources/android/xml/network_security_config.xml" target="res/xml/network_security_config.xml" />
+
+    <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest/application" mode="merge">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+    </config-file>
+
+    <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest/application" mode="merge">
+        <service android:name="com.datami.smi.SmiIntentService" />
+    </config-file>
+
+    <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest">
+        <uses-permission android:name="android.permission.INTERNET"/>
+    </config-file>
+
+    <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest">
+      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    </config-file>
+
+    <source-file src="src/android/com/datami/DatamiApplication.java" target-dir="app/src/main/java/com/datami/" />
+    <source-file src="src/android/com/datami/DatamiSDStateChangePlugin.java" target-dir="app/src/main/java/com/datami/" />
+    <!-- <source-file src="libs/android/smisdk-android.jar" target-dir="libs/" /> -->
+    <framework src="src/android/libSmiSdk.gradle" custom="true" type="gradleReference" />
+
+    <!-- <hook type="after_prepare" src="add_application_name.js" /> -->
+
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="DatamiCordovaPlugin">
+                <param name="ios-package" value="DatamiCordovaPlugin"/>
+                <param name="onload" value="true" />
+            </feature>
+            <feature name="DatamiSDStateChangePlugin">
+                <param name="ios-package" value="DatamiSDStateChangePlugin"/>
+            </feature>
+        </config-file>
+        
+        <source-file src="src/ios/AppDelegate+datami.m" />
+        <source-file src="src/ios/DatamiSDStateChangePlugin.m" />
+        <source-file src="src/ios/DatamiCordovaPlugin.m" />
+
+        <header-file src="src/ios/DatamiCordovaPlugin.h" />
+        <header-file src="src/ios/DatamiSDStateChangePlugin.h" />
+        <header-file src="src/ios/AppDelegate+datami.h" />
+
+
+        <framework src="SystemConfiguration.framework" />
+        <framework src="CoreTelephony.framework" />
+
+        <header-file src="libs/ios/SmiUIWebView.h"/>
+        <header-file src="libs/ios/SmiSdk.h"/>
+        <header-file src="libs/ios/SmiAnalytics.h"/>
+        <source-file src="libs/ios/libsmisdk.a" framework="true"/>
+
+        <config-file target="*-Info.plist" parent="NSAppTransportSecurity">
+            <dict>
+              <key>NSExceptionDomains</key>
+              <dict>
+                  <key>cloudmi.datami.com</key>
+                  <dict>
+                      <key>NSIncludesSubdomains</key>
+                      <true/>
+                      <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+                      <true/>
+                      <key>NSTemporaryExceptionMinimumTLSVersion</key>
+                      <string>TLSv1.1</string>
+                  </dict>
+              </dict>
+            </dict>
+        </config-file>
+    </platform>
+</plugin>
