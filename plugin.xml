@@ -33,7 +33,7 @@
     </config-file>
 
     <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application" mode="merge">
-      <application android:name="com.datami.DatamiApplication"/>
+      <!--<application android:name="com.datami.DatamiApplication"/>-->
       <application android:networkSecurityConfig="@xml/network_security_config" />
     </edit-config>
 
