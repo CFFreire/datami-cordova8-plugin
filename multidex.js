@@ -28,7 +28,7 @@ module.exports = function(ctx) {
             });
         });
     }
-    else if(doc.getroot().find('./application').attrib['android:name'] == 'androidx.multidex.MultiDex') {
+    else if(doc.getroot().find('./application').attrib['android:name'] == 'androidx.multidex.MultiDexApplication') {
         doc.getroot().find('./application').attrib['android:name'] = 'com.datami.DatamiApplication';
         fs.writeFileSync(manifestPath, doc.write({indent: 4}), 'utf-8');
 
@@ -37,7 +37,7 @@ module.exports = function(ctx) {
               if (err) {
                 return console.log(err);
               }
-              var result = data.replace(/extends Application/g, 'extends androidx.multidex.MultiDex');
+              var result = data.replace(/extends Application/g, 'extends androidx.multidex.MultiDexApplication');
 
               fs.writeFile(appPath, result, 'utf8', function (err) {
                  if (err) return console.log(err);
