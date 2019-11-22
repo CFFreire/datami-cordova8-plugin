@@ -16,19 +16,33 @@ module.exports = function(ctx) {
         doc.getroot().find('./application').attrib['android:name'] = 'com.datami.DatamiApplication';
         fs.writeFileSync(manifestPath, doc.write({indent: 4}), 'utf-8');
 
+        var appPath = path.join(ctx.opts.projectRoot, 'platforms/android/app/src/main/java/com/datami/DatamiApplication.java');
+        fs.readFile(appPath, 'utf8', function (err,data) {
+              if (err) {
+                return console.log(err);
+              }
+              var result = data.replace(/extends Application/g, 'extends android.support.multidex.MultiDexApplication');
+
+              fs.writeFile(appPath, result, 'utf8', function (err) {
+                 if (err) return console.log(err);
+            });
+        });
+    }
+    else if(doc.getroot().find('./application').attrib['android:name'] == 'androidx.multidex.MultiDex') {
+        doc.getroot().find('./application').attrib['android:name'] = 'com.datami.DatamiApplication';
+        fs.writeFileSync(manifestPath, doc.write({indent: 4}), 'utf-8');
 
         var appPath = path.join(ctx.opts.projectRoot, 'platforms/android/app/src/main/java/com/datami/DatamiApplication.java');
         fs.readFile(appPath, 'utf8', function (err,data) {
-  if (err) {
-    return console.log(err);
-  }
-  var result = data.replace(/extends Application/g, 'extends android.support.multidex.MultiDexApplication');
+              if (err) {
+                return console.log(err);
+              }
+              var result = data.replace(/extends Application/g, 'extends androidx.multidex.MultiDex');
 
-  fs.writeFile(appPath, result, 'utf8', function (err) {
-     if (err) return console.log(err);
-  });
-});
-
+              fs.writeFile(appPath, result, 'utf8', function (err) {
+                 if (err) return console.log(err);
+            });
+        });
     }
     else {
         doc.getroot().find('./application').attrib['android:name'] = 'com.datami.DatamiApplication';
