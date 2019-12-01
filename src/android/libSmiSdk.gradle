@@ -7,3 +7,15 @@ repositories {
 dependencies {
     compile 'com.datami:smisdk:+'
 }
+
+android {
+    defaultConfig {
+        minSdkVersion 15 
+        targetSdkVersion 28
+        multiDexEnabled true
+    }
+}
+
+dependencies {
+        implementation "androidx.multidex:multidex:2.0.1"
+}
